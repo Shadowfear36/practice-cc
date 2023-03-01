@@ -3,15 +3,12 @@ class CampersController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :camper_invalid
     def index
         campers = Camper.all
-        render json: campers, status: :ok
+        render json: campers.to_json(:except => [:activities]), status: :ok
     end
 
     def show
         camper = Camper.find(params[:id])
-        render json: camper.to_json( :include => {
-            :activities => {only: [:id, :name, :difficulty]}
-
-        }), status: :ok
+        render json: camper, status: :ok
     end
 
     def create
